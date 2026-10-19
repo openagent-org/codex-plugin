@@ -59,6 +59,7 @@ const cli = process.argv[2];
 const pluginId = 'openagent@openagent';
 const sources = new Set([
   'https://github.com/openagent-org/codex-plugin.git',
+  'https://gitee.com/openagent-org/codex-plugin.git',
   'https://oasn-ow.haimawan.com/git/openagent/codex-plugin.git',
 ]);
 const mcpUrls = [

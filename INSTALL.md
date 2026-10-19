@@ -53,6 +53,12 @@ git --version
 
 ## 2. 添加 OpenAgent Git Marketplace
 
+首次下载优先使用 `https://github.com/openagent-org/codex-plugin.git`；仅在 DNS、连接、超时、传输中断或 HTTP 5xx 导致下载失败时，改用 `https://gitee.com/openagent-org/codex-plugin.git` 尝试一次。备用仍失败就停止，不循环切换。审批或权限拒绝、证书错误、HTTP 401/403/404/429/451、内容校验及安装执行错误不能触发换源。此规则同样适用于本仓库的 Raw 文件下载：GitHub 为 `https://raw.githubusercontent.com/openagent-org/codex-plugin/<SHA>/<路径>`，Gitee 为 `https://gitee.com/openagent-org/codex-plugin/raw/<SHA>/<路径>`；脚本须完整下载、校验后只执行一次，执行失败不换源重跑。
+
+下载前用 `git ls-remote <本次来源> refs/heads/rel` 记录完整提交 SHA。首源尚未解析出 SHA 就发生上述网络失败时，可由备用源确定本次 SHA；已经取得 SHA 后，Raw 下载只能使用相同 SHA 和路径。原生 Marketplace 保持 `--ref rel` 以保留后续更新：换源前确认备用 `rel` 仍为该 SHA，刷新后从 Marketplace 返回的 `root` 用 `git -C <root> rev-parse HEAD` 核对下载提交；不一致或无法核对则停止。此提交核对不能代替第 3 节的原生插件状态验证。
+
+原生命令下载失败后，先回读实际登记，再按下方移除、添加步骤只替换 OpenAgent 来源，命令中的仓库 URL 改为本次选定来源，其他参数不变。已登记的两个官方源均可继续使用，不为恢复首选源反复迁移；后续失败最多改用另一个官方源一次。换源不重试 OAuth、卸载、重启或创建新任务。
+
 先读取已注册的 Marketplace：
 
 ```bash
@@ -60,7 +66,7 @@ git --version
 ```
 
 若已有 `openagent`，只读取当前配置 `[marketplaces.openagent]` 中的 `source_type`、`source`、
-`ref` 和 `sparse_paths`。来源、分支和稀疏路径均与下方参数一致时，跳过移除和添加，继续刷新；
+`ref` 和 `sparse_paths`。未触发换源时可保留上述任一官方 Git 来源；已决定使用备用源时，只有当前登记与本次选定来源相同才算匹配。来源匹配且分支和稀疏路径均与下方参数一致时，跳过移除和添加，继续刷新；
 否则无需再次确认，先移除旧登记：
 
 ```bash
@@ -94,12 +100,11 @@ git --version
 "<bundled-codex>" plugin marketplace list --json
 ```
 
-结果必须包含技术标识为 `openagent`、来源为
-`https://github.com/openagent-org/codex-plugin.git` 的记录，否则停止。
+结果必须包含技术标识为 `openagent`、来源为本次选定的 GitHub 或 Gitee 官方仓库的记录，否则停止。
 重新读取当前 `[marketplaces.openagent]` 的上述四个配置字段，核对 `ref` 为 `rel`、
 `sparse_paths` 恰好包含 `.agents/plugins` 和 `codex`；不得使用替换前的配置快照，任一不匹配都停止。
 
-只有实际命令失败、权限被拒绝或新登记验证失败时才按第 7 节报告。中途失败后再次继续安装时，
+符合本节条件的下载失败先完成一次备用尝试；其他实际命令失败、权限被拒绝或新登记验证失败时按第 7 节报告。中途失败后再次继续安装时，
 先重新读取实际登记状态：未注册则添加，已匹配则继续刷新和安装，不重复移除已匹配的新源。
 
 ## 3. 安装并验证插件

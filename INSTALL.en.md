@@ -48,6 +48,12 @@ If either command fails, stop and report the actual error.
 
 ## 2. Add the OpenAgent Git Marketplace
 
+For the first download, prefer `https://github.com/openagent-org/codex-plugin.git`. Only a DNS, connection, timeout, interrupted transfer or HTTP 5xx download failure permits one attempt through `https://gitee.com/openagent-org/codex-plugin.git`. Stop if that attempt fails; do not cycle between sources. Approval or permission denials, certificate errors, HTTP 401/403/404/429/451, content verification failures and installation execution errors do not permit switching. The same rule applies to this repository's Raw files: use `https://raw.githubusercontent.com/openagent-org/codex-plugin/<SHA>/<path>` or `https://gitee.com/openagent-org/codex-plugin/raw/<SHA>/<path>`. Download and validate a complete script before executing it once; never switch sources to rerun a failed execution.
+
+Before downloading, record the full commit SHA with `git ls-remote <selected-source> refs/heads/rel`. If the preferred source fails before resolving a SHA, the fallback may establish it. After resolution, Raw downloads must use the same SHA and path. Keep native Marketplace registration at `--ref rel` for future updates: before switching, verify that the fallback's `rel` still matches that SHA; after refresh, verify the downloaded commit with `git -C <root> rev-parse HEAD`, using the Marketplace's returned `root`. Stop if it differs or cannot be verified. This commit check does not replace the native plugin status checks in section 3.
+
+After a native download failure, reread the actual registration and use the removal/addition steps below to replace only the OpenAgent source. Substitute the selected repository URL in the command, keeping all other arguments. An existing registration from either official source may continue; do not repeatedly migrate it back to the preferred source. A later download failure permits at most one attempt through the other official source. Switching sources never retries OAuth, uninstallation, restart or new-chat creation.
+
 First read the registered Marketplaces:
 
 ```bash
@@ -55,8 +61,7 @@ First read the registered Marketplaces:
 ```
 
 If `openagent` is already registered, read only `source_type`, `source`, `ref`, and `sparse_paths`
-from `[marketplaces.openagent]` in the current configuration. If the source, branch, and sparse paths
-all match the parameters below, skip removal and addition and continue with the refresh. Otherwise,
+from `[marketplaces.openagent]` in the current configuration. Without a fallback decision, either official Git source may be retained; after selecting the fallback, only a registration using that selected source matches. If the source matches and the branch and sparse paths match the parameters below, skip removal and addition and continue with the refresh. Otherwise,
 remove the old registration without asking for confirmation again:
 
 ```bash
@@ -92,13 +97,12 @@ Then read the Marketplace list:
 "<bundled-codex>" plugin marketplace list --json
 ```
 
-The result must contain a record whose technical identifier is `openagent` and whose source is `https://github.com/openagent-org/codex-plugin.git`. Otherwise, stop.
+The result must contain a record whose technical identifier is `openagent` and whose source is the selected official GitHub or Gitee repository. Otherwise, stop.
 Read those four fields again from the current `[marketplaces.openagent]` configuration. Verify that
 `ref` is `rel` and `sparse_paths` contains exactly `.agents/plugins` and `codex`; do not reuse the
 configuration snapshot from before replacement. Stop if either check does not match.
 
-Report under step 7 only if an actual command fails, permission is denied, or verification of the
-new registration fails. When resuming after an interrupted installation, first read the actual
+For an eligible download failure, make the single fallback attempt first. Report other command failures, permission denials or registration verification failures under step 7. When resuming after an interrupted installation, first read the actual
 registration again: add it if absent, or continue refreshing and installing if it already matches.
 Do not remove a matching new source again.
 
