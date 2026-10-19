@@ -1,0 +1,3 @@
+interface:
+  display_name: "OpenAgent Search Agent"
+  short_description: "Search and select OpenAgent marketplace Agents"

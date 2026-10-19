@@ -1,0 +1,20 @@
+{
+  "name": "openagent",
+  "interface": {
+    "displayName": "OpenAgent"
+  },
+  "plugins": [
+    {
+      "name": "openagent",
+      "source": {
+        "source": "local",
+        "path": "./codex"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}

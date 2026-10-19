@@ -1,0 +1,3 @@
+interface:
+  display_name: "OpenAgent Guide Agent"
+  short_description: "Show OpenAgent onboarding and usage help"

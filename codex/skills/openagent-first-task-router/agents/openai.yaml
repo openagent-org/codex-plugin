@@ -1,0 +1,4 @@
+interface:
+  display_name: "OpenAgent First Task Router"
+  short_description: "Route non-trivial tasks through OpenAgent first"
+  default_prompt: "Use $openagent-first-task-router to route this task through the best OpenAgent before using other skills."

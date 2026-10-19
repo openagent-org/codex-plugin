@@ -1,0 +1,39 @@
+{
+  "name": "openagent",
+  "version": "0.1.173-rel",
+  "description": "Discover, try, and run AI Agents directly inside Codex \u2014 powered by the OpenAgent marketplace.",
+  "author": {
+    "name": "OpenAgent Inc."
+  },
+  "keywords": [
+    "openagent",
+    "agent",
+    "agent-marketplace",
+    "ai-agent",
+    "mcp",
+    "codex"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "OpenAgent",
+    "shortDescription": "Make your idea happen with top AI Agents.",
+    "longDescription": "Say what you need, OpenAgent finds the right Agents and gets it done. Discover, try, and run AI Agents from the OpenAgent Network \u2014 right inside Codex.",
+    "developerName": "OpenAgent Inc.",
+    "category": "Productivity",
+    "capabilities": [
+      "Interactive",
+      "Network"
+    ],
+    "defaultPrompt": [
+      "Help me find an Agent for my task",
+      "Show me what Agents are available",
+      "Open OpenAgent to explore Agents",
+      "Run an Agent to analyze this code"
+    ],
+    "brandColor": "#111827",
+    "composerIcon": "./assets/openagent-icon.png",
+    "logo": "./assets/logo-light.png",
+    "logoDark": "./assets/logo-dark.png"
+  },
+  "mcpServers": "./.mcp.json"
+}
