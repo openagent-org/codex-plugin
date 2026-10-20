@@ -53,9 +53,9 @@ git --version
 
 ## 2. 添加 OpenAgent Git Marketplace
 
-首次下载优先使用 `https://github.com/openagent-org/codex-plugin.git`；仅在 DNS、连接、超时、传输中断或 HTTP 5xx 导致下载失败时，改用 `https://gitee.com/openagent-org/codex-plugin.git` 尝试一次。备用仍失败就停止，不循环切换。审批或权限拒绝、证书错误、HTTP 401/403/404/429/451、内容校验及安装执行错误不能触发换源。此规则同样适用于本仓库的 Raw 文件下载：GitHub 为 `https://raw.githubusercontent.com/openagent-org/codex-plugin/<SHA>/<路径>`，Gitee 为 `https://gitee.com/openagent-org/codex-plugin/raw/<SHA>/<路径>`；脚本须完整下载、校验后只执行一次，执行失败不换源重跑。
+首次下载优先使用 `https://github.com/openagent-org/codex-plugin.git`；仅在 DNS、连接、超时、传输中断或 HTTP 5xx 导致下载失败时，改用 `https://gitee.com/openagent-org/codex-plugin.git` 尝试一次。备用仍失败就停止，不循环切换。审批或权限拒绝、证书错误、HTTP 401/403/404/429/451、内容校验及安装执行错误不能触发换源。此规则同样适用于本仓库的 Raw 文件下载：GitHub 为 `https://raw.githubusercontent.com/openagent-org/codex-plugin/rel/<路径>`，Gitee 为 `https://gitee.com/openagent-org/codex-plugin/raw/rel/<路径>`；脚本须完整下载、校验后只执行一次，执行失败不换源重跑。
 
-下载前用 `git ls-remote <本次来源> refs/heads/rel` 记录完整提交 SHA。首源尚未解析出 SHA 就发生上述网络失败时，可由备用源确定本次 SHA；已经取得 SHA 后，Raw 下载只能使用相同 SHA 和路径。原生 Marketplace 保持 `--ref rel` 以保留后续更新：换源前确认备用 `rel` 仍为该 SHA，刷新后从 Marketplace 返回的 `root` 用 `git -C <root> rev-parse HEAD` 核对下载提交；不一致或无法核对则停止。此提交核对不能代替第 3 节的原生插件状态验证。
+Raw 文件直接使用 `rel`，原生 Marketplace 保持 `--ref rel` 以保留后续更新；换源时保持相同分支和文件路径。`rel` 可能随发布更新，不保证安装中的多次下载来自同一提交；继续按第 3 节验证实际插件状态和版本。
 
 原生命令下载失败后，先回读实际登记，再按下方移除、添加步骤只替换 OpenAgent 来源，命令中的仓库 URL 改为本次选定来源，其他参数不变。已登记的两个官方源均可继续使用，不为恢复首选源反复迁移；后续失败最多改用另一个官方源一次。换源不重试 OAuth、卸载、重启或创建新任务。
 

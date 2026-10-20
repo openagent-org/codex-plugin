@@ -8,14 +8,14 @@ Ask Codex to read the [English installation guide](./INSTALL.en.md) or the
 [Chinese installation guide](./INSTALL.md) and follow its instructions.
 
 ```text
-Read https://raw.githubusercontent.com/openagent-org/codex-plugin/rel/INSTALL.en.md and follow the instructions to install OpenAgent. If that download fails due to DNS, connection, timeout, interrupted transfer or HTTP 5xx, try https://gitee.com/openagent-org/codex-plugin/raw/rel/INSTALL.en.md once; retain any already resolved commit SHA. Do not switch for permission, certificate or other HTTP errors.
+Read https://raw.githubusercontent.com/openagent-org/codex-plugin/rel/INSTALL.en.md and follow the instructions to install OpenAgent. If that download fails due to DNS, connection, timeout, interrupted transfer or HTTP 5xx, try https://gitee.com/openagent-org/codex-plugin/raw/rel/INSTALL.en.md once, keeping rel and the same file path. Do not switch for permission, certificate or other HTTP errors.
 ```
 
 The plugin ID is `openagent@openagent`. Installation uses the `rel` branch and
 the production OpenAgent service. Complete the browser sign-in when prompted.
 Node.js 20 or later is required for local file uploads. Downloads prefer GitHub,
 with one Gitee fallback for network failures under the installation guide’s rules;
-keep the same resolved commit and never retry script execution or sign-in.
+keep rel and the same file path, and never retry script execution or sign-in.
 
 ## Use
 
