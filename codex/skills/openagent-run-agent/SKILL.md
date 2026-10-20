@@ -173,6 +173,8 @@ return original_attachment_and_resource_id(grant)
 
 Input is the complete parameters from Request Preparation. Emit the Agent Execution update before calling the progress and execution tools; describe the current invocation action without claiming that submission has completed. The stable `idempotency_key` must be valid and non-placeholder, and reused for the corresponding `openagent_progress` and `openagent_run`.
 
+The progress card displays the exact `data.prompt` and `data.attachments` submitted to `openagent_run`. Do not send a separate prompt preview, fenced code block, or duplicate invocation data in the conversation.
+
 1. Then call `openagent_progress` with trusted `agent_id` and `agent_name`, and the same `idempotency_key` and `locale` as the Run. Optional display fields must come only from trusted Agent metadata. When only an ID is available without a trusted name, use the original `agent_id` as the display identifier in `agent_name`, without claiming it is the Agent's actual name. Keep the same original ID in `openagent_run.agent_id`.
 2. Wait for the Host MCP Tool Result of `openagent_progress`. On an authentication failure, follow Runtime Sign-in and stop here. Otherwise call `openagent_run` once with the same `idempotency_key` and `locale`. Failure or timeout of `openagent_progress` affects only progress display unless authentication failed; still perform this one Run.
 3. `openagent_run` is the sole source of truth for Invocation state and business results. A progress-card failure does not change the Run, trigger a business retry, or cancel, roll back, or duplicate the Run.
