@@ -2,7 +2,7 @@
 
 本指南仅适用于用户本机的 ChatGPT / Codex Desktop。执行任何安装命令前，先确认当前会话实际所在的客户端，不要仅凭用户复制的安装提示词判断平台。如果当前客户端与本指南不一致，不得执行本文命令、注册 OAuth 客户端或修改配置；请先返回 [OpenAgent 安装汇总页](https://oasn-ow.haimawan.com/plugin)，找到当前客户端对应的安装链接，改用该指南继续安装。如果无法确认客户端，或汇总页没有对应平台，停止安装并询问用户。
 
-本地文件上传需要 Node.js 20+。插件内置固定版本 COS Node.js SDK 及依赖，打包在执行 Skill 的 `scripts/cos_sdk.cjs.gz`；`scripts/cos_upload.cjs` 和 `scripts/cos_sdk.lock.json` 与该压缩包一并安装。首次需要 SDK 时，脚本离线校验 SDK 压缩包，并解压到 `scripts/.cos-sdk/<压缩包 SHA-256>/cos_sdk.cjs`；后续校验缓存文件 SHA-256 后复用，缓存缺失、损坏或压缩包更新时自动重新解压，退出后保留缓存。`scripts/` 目录需当前用户可写。清理上传检查点不加载 SDK。不搜索宿主 SDK，不运行 `npm install`，也不下载依赖。缺少 SDK 运行文件或 SDK 校验失败时停止并修复插件安装。
+本地文件上传需要 Node.js 20+。插件内置固定版本 COS Node.js SDK 及依赖，打包在执行 Skill 的 `scripts/cos_sdk.cjs.gz`；`scripts/cos_upload.cjs` 和 `scripts/cos_sdk.lock.json` 与该压缩包一并安装。首次需要 SDK 时，脚本离线校验 SDK 压缩包，并解压到 `scripts/.cos-sdk/node_modules/<压缩包 SHA-256>/cos_sdk.cjs`；后续校验缓存文件 SHA-256 后复用，缓存缺失、损坏或压缩包更新时自动重新解压，退出后保留缓存。`scripts/` 目录需当前用户可写。清理上传检查点不加载 SDK。不搜索宿主 SDK，不运行 `npm install`，也不下载依赖。缺少 SDK 运行文件或 SDK 校验失败时停止并修复插件安装。
 
 > 完整插件 ID：`openagent@openagent`
 
