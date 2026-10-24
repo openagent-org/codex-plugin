@@ -1,7 +1,7 @@
 {
   "mcpServers": {
     "openagent": {
-      "url": "https://oasn-ow.haimawan.com/mcp/v1/open-agent",
+      "url": "https://openagent.org/mcp/v1/open-agent",
       "scopes": [
         "agent.discover",
         "agent.invoke",

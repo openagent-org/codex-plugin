@@ -1,6 +1,6 @@
 # Install OpenAgent
 
-This guide applies only to ChatGPT / Codex Desktop on the user's local computer. Before running any installation command, first confirm which client the current conversation is actually running in; do not infer the platform only from an installation prompt copied by the user. If the current client does not match this guide, do not run the commands in this document, register an OAuth client, or change configuration. Return to the [OpenAgent installation hub](https://oasn-ow.haimawan.com/plugin), find the installation link for the current client, and continue with that guide. If the client cannot be confirmed or the hub does not list the platform, stop and ask the user.
+This guide applies only to ChatGPT / Codex Desktop on the user's local computer. Before running any installation command, first confirm which client the current conversation is actually running in; do not infer the platform only from an installation prompt copied by the user. If the current client does not match this guide, do not run the commands in this document, register an OAuth client, or change configuration. Return to the [OpenAgent installation hub](https://openagent.org/plugin), find the installation link for the current client, and continue with that guide. If the client cannot be confirmed or the hub does not list the platform, stop and ask the user.
 
 Local file uploads require Node.js 20 or newer. The plugin includes the fixed COS Node.js SDK and its dependencies in the run Skill’s `scripts/cos_sdk.cjs.gz` bundle, installed alongside `scripts/cos_upload.cjs` and `scripts/cos_sdk.lock.json`. On first use, the script verifies the compressed SDK bundle offline, then decompresses the bundle to `scripts/.cos-sdk/node_modules/<bundle SHA-256>/cos_sdk.cjs`. Later uses verify the cached file’s SHA-256 before reusing it; a missing or damaged cache, or an updated bundle, triggers decompression automatically. The cache remains after exit. The current user must be able to write to `scripts/`. Upload checkpoint cleanup does not load the SDK. The plugin does not search for a host SDK, run `npm install`, or download dependencies. Stop and repair the plugin installation if SDK runtime files are missing or SDK verification fails.
 
@@ -61,7 +61,7 @@ First read the registered Marketplaces:
 ```
 
 If `openagent` is already registered, read only `source_type`, `source`, `ref`, and `sparse_paths`
-from `[marketplaces.openagent]` in the current configuration. Without a fallback decision, either official Git source may be retained; after selecting the fallback, only a registration using that selected source matches. If the source matches and the branch and sparse paths match the parameters below, skip removal and addition and continue with the refresh. Otherwise,
+from `[marketplaces.openagent]` in the current configuration. Accept only `source_type=git` with `source` equal to the exact GitHub or Gitee URL above; stop on any other same-name source without removing or overwriting it. Without a fallback decision, either official Git source may be retained; after selecting the fallback, only a registration using that selected source matches. If the source matches and the branch and sparse paths match the parameters below, skip removal and addition and continue with the refresh. Otherwise,
 remove the old registration without asking for confirmation again:
 
 ```bash
@@ -147,7 +147,7 @@ Verify all fields on the same record:
 
 If any field does not match, do not claim that installation succeeded. When every field matches, obtain and temporarily retain the actual version from the same record. Continue with the remaining steps and do not output the completion message early.
 
-For an existing REL installation, complete the preceding installation steps, then run `"<bundled-codex>" mcp get openagent --json` before login and verify that the effective URL is `https://oasn-ow.haimawan.com/mcp/v1/open-agent`. If it still shows the legacy REL URL, stop and check the published REL version; do not continue login against the old URL. After the updated plugin loads, have the user reauthorize in step 4. Do not copy old tokens or relabel their resource. This migration applies only to REL and does not change dev, test, or preview endpoints.
+For an existing REL installation, complete the preceding installation steps, then run `"<bundled-codex>" mcp get openagent --json` before login and verify that the effective URL is `https://openagent.org/mcp/v1/open-agent`. If it still shows the legacy REL URL, stop and check the published REL version; do not continue login against the old URL. After the updated plugin loads, have the user reauthorize in step 4. Do not copy old tokens or relabel their resource. This migration applies only to REL and does not change dev, test, or preview endpoints.
 
 ## 4. Complete OAuth login
 
@@ -165,7 +165,7 @@ The user must personally complete sign-in and authorization on the page that ope
 "<bundled-codex>" mcp get openagent --json
 ```
 
-The result must show all of the following: the MCP technical identifier is `openagent`, its URL is `https://oasn-ow.haimawan.com/mcp/v1/open-agent`, and its status is enabled.
+The result must show all of the following: the MCP technical identifier is `openagent`, its URL is `https://openagent.org/mcp/v1/open-agent`, and its status is enabled.
 
 ## 6. Create and open the post-installation task
 

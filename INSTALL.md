@@ -1,6 +1,6 @@
 # 安装 OpenAgent
 
-本指南仅适用于用户本机的 ChatGPT / Codex Desktop。执行任何安装命令前，先确认当前会话实际所在的客户端，不要仅凭用户复制的安装提示词判断平台。如果当前客户端与本指南不一致，不得执行本文命令、注册 OAuth 客户端或修改配置；请先返回 [OpenAgent 安装汇总页](https://oasn-ow.haimawan.com/plugin)，找到当前客户端对应的安装链接，改用该指南继续安装。如果无法确认客户端，或汇总页没有对应平台，停止安装并询问用户。
+本指南仅适用于用户本机的 ChatGPT / Codex Desktop。执行任何安装命令前，先确认当前会话实际所在的客户端，不要仅凭用户复制的安装提示词判断平台。如果当前客户端与本指南不一致，不得执行本文命令、注册 OAuth 客户端或修改配置；请先返回 [OpenAgent 安装汇总页](https://openagent.org/plugin)，找到当前客户端对应的安装链接，改用该指南继续安装。如果无法确认客户端，或汇总页没有对应平台，停止安装并询问用户。
 
 本地文件上传需要 Node.js 20+。插件内置固定版本 COS Node.js SDK 及依赖，打包在执行 Skill 的 `scripts/cos_sdk.cjs.gz`；`scripts/cos_upload.cjs` 和 `scripts/cos_sdk.lock.json` 与该压缩包一并安装。首次需要 SDK 时，脚本离线校验 SDK 压缩包，并解压到 `scripts/.cos-sdk/node_modules/<压缩包 SHA-256>/cos_sdk.cjs`；后续校验缓存文件 SHA-256 后复用，缓存缺失、损坏或压缩包更新时自动重新解压，退出后保留缓存。`scripts/` 目录需当前用户可写。清理上传检查点不加载 SDK。不搜索宿主 SDK，不运行 `npm install`，也不下载依赖。缺少 SDK 运行文件或 SDK 校验失败时停止并修复插件安装。
 
@@ -66,7 +66,7 @@ Raw 文件直接使用 `rel`，原生 Marketplace 保持 `--ref rel` 以保留�
 ```
 
 若已有 `openagent`，只读取当前配置 `[marketplaces.openagent]` 中的 `source_type`、`source`、
-`ref` 和 `sparse_paths`。未触发换源时可保留上述任一官方 Git 来源；已决定使用备用源时，只有当前登记与本次选定来源相同才算匹配。来源匹配且分支和稀疏路径均与下方参数一致时，跳过移除和添加，继续刷新；
+`ref` 和 `sparse_paths`。仅接受 `source_type=git` 且 `source` 为上述 GitHub 或 Gitee 精确地址；其他同名来源停止，不移除或覆盖。未触发换源时可保留上述任一官方 Git 来源；已决定使用备用源时，只有当前登记与本次选定来源相同才算匹配。来源匹配且分支和稀疏路径均与下方参数一致时，跳过移除和添加，继续刷新；
 否则无需再次确认，先移除旧登记：
 
 ```bash
@@ -149,7 +149,7 @@ Raw 文件直接使用 `rel`，原生 Marketplace 保持 `--ref rel` 以保留�
 任一字段不匹配，都不能声称安装成功。全部匹配时，从同一条记录取得并暂存实际版本号；
 此时继续后续步骤，不得提前输出安装完成文案。
 
-旧 REL 安装迁移：完成前述安装步骤后，在登录前使用 `"<bundled-codex>" mcp get openagent --json` 核对实际 URL 为 `https://oasn-ow.haimawan.com/mcp/v1/open-agent`。若仍为旧 REL 地址，说明插件更新尚未生效，停止并核对 REL 发布版本，不向旧地址继续登录。加载新版本后按第 4 节由用户重新授权，不复制旧 Token 或仅改写凭据的 resource。此迁移只针对 REL，不修改 dev、test、preview 的环境地址。
+旧 REL 安装迁移：完成前述安装步骤后，在登录前使用 `"<bundled-codex>" mcp get openagent --json` 核对实际 URL 为 `https://openagent.org/mcp/v1/open-agent`。若仍为旧 REL 地址，说明插件更新尚未生效，停止并核对 REL 发布版本，不向旧地址继续登录。加载新版本后按第 4 节由用户重新授权，不复制旧 Token 或仅改写凭据的 resource。此迁移只针对 REL，不修改 dev、test、preview 的环境地址。
 
 ## 4. 执行 OAuth 登录
 
@@ -175,7 +175,7 @@ OAuth 登录和授权必须由用户本人在上述自动打开的页面中完�
 ```
 
 结果必须同时满足：MCP 技术标识为 `openagent`、URL 为
-`https://oasn-ow.haimawan.com/mcp/v1/open-agent`、状态已启用。
+`https://openagent.org/mcp/v1/open-agent`、状态已启用。
 
 ## 6. 创建并切换到安装后任务
 

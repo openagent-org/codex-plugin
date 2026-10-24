@@ -60,11 +60,9 @@ const pluginId = 'openagent@openagent';
 const sources = new Set([
   'https://github.com/openagent-org/codex-plugin.git',
   'https://gitee.com/openagent-org/codex-plugin.git',
-  'https://oasn-ow.haimawan.com/git/openagent/codex-plugin.git',
 ]);
 const mcpUrls = [
-  'https://oasn-ow.haimawan.com/mcp/v1/open-agent',
-  'https://oasn-test.haimawan.com/e/preview/mcp/v1/open-agent',
+  'https://openagent.org/mcp/v1/open-agent',
 ];
 const cache = join(process.env.CODEX_HOME || join(homedir(), '.codex'), 'plugins/cache/openagent/openagent');
 
@@ -108,7 +106,7 @@ function mcps() {
 
 function checkSource(value) {
   if (value?.sourceType !== 'git' || !sources.has(value.source)) {
-    throw new Error('同名 OpenAgent 的来源不是当前或迁移前的官方仓库，已停止清理');
+    throw new Error('同名 OpenAgent 的来源不是当前官方仓库，已停止清理');
   }
 }
 
