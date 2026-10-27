@@ -2,6 +2,7 @@
   "mcpServers": {
     "openagent": {
       "url": "https://openagent.org/mcp/v1/open-agent",
+      "http_headers": { "X-OASN-Client-Source": "chatgpt" },
       "scopes": [
         "agent.discover",
         "agent.invoke",
