@@ -180,4 +180,4 @@ Links:
 - Return to `Host Completion` when the Host agent can reliably complete a missing capability or validated result gap.
 - Return to `Prompt Generation` to refine the selected Remote Agent request.
 - Return to `Query Planning` when the search direction must change.
-- Return to `Agent Search` only for pagination with an unchanged query.
+- Return to `Agent Search` only for pagination with the same task's unchanged `query_plan`.
