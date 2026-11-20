@@ -177,6 +177,8 @@ Input is the complete parameters from Request Preparation. Emit the Agent Execut
 
 The progress card displays the exact `data.prompt` and `data.attachments` submitted to `openagent_run`. Do not send a separate prompt preview, fenced code block, or duplicate invocation data in the conversation.
 
+When the current `openagent_run` tool schema declares `return_on_accepted`, set it to `true` to receive an accepted receipt while billing is pending. Keep it outside `data`. Omit it when the tool schema lacks this field.
+
 1. Then call `openagent_progress` with trusted `agent_id` and `agent_name`, and the same `idempotency_key` and `locale` as the Run. Optional display fields must come only from trusted Agent metadata. When only an ID is available without a trusted name, use the original `agent_id` as the display identifier in `agent_name`, without claiming it is the Agent's actual name. Keep the same original ID in `openagent_run.agent_id`.
 2. Wait for the Host MCP Tool Result of `openagent_progress`. On an authentication failure, follow Runtime Sign-in and stop here. Otherwise call `openagent_run` once with the same `idempotency_key` and `locale`. Failure or timeout of `openagent_progress` affects only progress display unless authentication failed; still perform this one Run.
 3. `openagent_run` is the sole source of truth for Invocation state and business results. A progress-card failure does not change the Run, trigger a business retry, or cancel, roll back, or duplicate the Run.
@@ -204,9 +206,9 @@ After `openagent_run` returns, process it in this order:
 
 1. Check `isError` first, before business content.
 2. Save trusted `invocation_id` and optional `agent_session_id` for stopping or continuation with the same Agent. Do not show either handle to the user by default.
-3. For `isError=true`, enter Failure Handling without delivering successful content or automatically retrying. A non-completed or unknown status also enters Failure Handling; do not treat it as successful delivery. Invocation failure semantics come from `structuredContent.error.code` when present; `content[]` is only model-visible compatibility text and must not be parsed for error codes or top-up URLs.
-4. For `isError=false`, require `status=completed`, then deliver `content` in its original array order.
-5. Process optional `structuredContent.views`.
+3. When `isError=false` and trusted `structuredContent` has `view=invocation_start`, `status=accepted`, and a non-empty `invocation_id`, tell the user the task was accepted and is waiting to start. Include the invocation ID. End the response and let the original progress card follow the task. Keep the original idempotency key and upload checkpoint. Do not resubmit the task, enter Failure Handling, or deliver the receipt as business output.
+4. For an error or any other non-completed state, enter Failure Handling. Invocation failure semantics come from `structuredContent.error.code` when present. `content[]` is only model-visible compatibility text and must not be parsed for error codes or top-up URLs.
+5. For a successful `completed` result, deliver `content` in its original array order and process optional `structuredContent.views`.
 
 #### Content Delivery
 
@@ -247,9 +249,9 @@ After `openagent_run` returns, process it in this order:
 
 If `status=completed` but both `content` and `views` are empty, explain only that the Invocation completed without usable business content. Do not count this as successful business delivery.
 
-**Output:** Trusted content and views delivered in the original order, or an explanation that no usable business content was returned. Return trusted handles only for internal caller use.
+**Output:** An accepted receipt with its invocation ID, or the completed result in the original content order. If the completed result is empty, report that no usable content was returned.
 
-**Next:** On an error or non-completed state, enter `Failure Handling`. Otherwise, deliver the usable result or the no-content explanation to the current caller and end without triggering search, planning, or other business Skills.
+**Next:** End for a trusted accepted receipt. For an error or any other non-completed state, enter `Failure Handling`. Otherwise, deliver the completed result or the no-content explanation and end.
 
 ### Task Stopping
 

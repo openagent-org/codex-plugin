@@ -6,6 +6,8 @@ Use lightweight acceptance checking by default. Do not independently verify or r
 
 ## Result Validation
 
+When `isError=false` and trusted `structuredContent` has `view=invocation_start`, `status=accepted`, and a non-empty `invocation_id`, report that the task was accepted and is waiting to start. Include the invocation ID and end the response. The original progress card follows the task. Keep the original idempotency key and upload checkpoint, and leave dependent tasks waiting for the result.
+
 Determine whether the result satisfies the user by checking whether:
 
 - The invocation succeeded and returned usable task content.
@@ -172,11 +174,12 @@ Links:
 - Attribute a result to a Remote Agent only when the source affects interpretation, trustworthiness, or later use.
 - Never output Remote Agent invocation logs, internal status, raw response structures, or other execution details.
 
-**Output:** A complete task result, a usable partial result with its remaining gaps, or a trustworthy failure message, with all user-facing artifacts delivered according to Output Handling.
+**Output:** An accepted receipt with its invocation ID, a task result with its artifacts, or a trustworthy failure message.
 
 **Next:**
 
 - Finish when the result satisfies the task or the workflow reaches a terminal failure state.
+- End the response for an accepted receipt. Keep the original invocation and skip retries, Agent switches, and dependent work.
 - Return to `Host Completion` when the Host agent can reliably complete a missing capability or validated result gap.
 - Return to `Prompt Generation` to refine the selected Remote Agent request.
 - Return to `Query Planning` when the search direction must change.

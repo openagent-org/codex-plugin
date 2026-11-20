@@ -293,6 +293,7 @@ Rules:
 - Call `openagent_progress` first, then call `openagent_run` after the progress result is surfaced.
 - Keep `openagent_progress` as a standalone first-class tool call; do not batch or parallelize it with `openagent_run`.
 - Use the same stable `idempotency_key` for both calls.
+- When the current `openagent_run` schema declares `return_on_accepted`, pass it as `true` outside `data`. Omit the field for older schemas.
 - When attachments were uploaded, pass every returned `structuredContent.attachment` object in `data` exactly as required by `Send Attachments`.
 - Surface the native `openagent_progress` result directly without transforming or summarizing it.
 - Treat only the `openagent_run` response as the task result.
